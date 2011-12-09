@@ -2,7 +2,7 @@
 {application, webot,
  [
   {description, "webot"},
-  {vsn, "1"},
+  {vsn, "0.1"},
   {modules, []},
   {registered, []},
   {applications, [
