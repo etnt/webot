@@ -7,13 +7,15 @@
 -export([pastebin/3
          , status/3
          , time/3
+         , status_msg/1
+         , latest_job/1
         ]).
 
 
 %% ---------------------------------------------------------------------
 %% STATUS (of particular Jenkins job)
 %% ---------------------------------------------------------------------
--define(JENKINS_HOST, "http://jenkins-dev-master1.internal.machines:8080").
+-define(JENKINS_HOST, "jenkins-dev-master1.internal.machines:8080/jenkins").
 -define(PROJECT, "KRED.staging").
 
 status(Sock, Line, Match) ->
