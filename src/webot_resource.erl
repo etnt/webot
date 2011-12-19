@@ -3,11 +3,15 @@
 %% @doc Example webmachine_resource.
 
 -module(webot_resource).
--export([init/1, to_html/2]).
+-export([init/1]).
 
 -include_lib("webmachine/include/webmachine.hrl").
 
-init([]) -> {ok, undefined}.
+-record(ctx, {
+          method
+         }).
 
-to_html(ReqData, State) ->
-    {"<html><body>Hello, new world</body></html>", ReqData, State}.
+init([]) ->
+    {ok, #ctx{}}.
+%  {{trace, "/tmp"}, #ct{}. % when debugging!
+
