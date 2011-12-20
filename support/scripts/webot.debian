@@ -1,0 +1,51 @@
+#!/bin/bash
+#
+# Startup script for the webot server
+#
+# config: /etc/webot.conf
+#
+
+webot=/home/webot/start.sh
+prog=webot
+
+test -x $webot || exit 1
+
+NAME=webot
+NODE=${NAME}@`hostname -s`
+
+case "$1" in
+    start)
+	echo -n "Starting $prog: "
+	$webot
+	echo "."
+    ;;
+    stop)
+	echo -n "Stopping $prog: "
+	$webot -d
+	echo "."
+	;;
+    status)
+	STATUS=`erl_call -n ${NODE} -a 'erlang whereis [webot_sup]'`
+	if [ ${STATUS} != "undefined" ]; then
+	    echo "${NAME} is running."
+	else
+	    echo "${NAME} is not running."
+	fi
+	;;
+    restart)
+	echo -n "Stopping $prog: "
+        $webot -d
+	echo "."
+	sleep 2
+	echo -n "Starting $prog: "
+	$webot
+	echo "."
+        ;;
+
+    *)
+	echo $"Usage: $prog {start|stop|restart|status}"
+	exit 1
+esac
+
+exit 0
+
