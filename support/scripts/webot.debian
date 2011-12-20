@@ -1,6 +1,7 @@
 #!/bin/bash
 #
-# Startup script for the webot server
+# Startup script for the webot server, running
+# as the ${WEBOT_USER}
 #
 # config: /etc/webot.conf
 #
@@ -12,20 +13,21 @@ test -x $webot || exit 1
 
 NAME=webot
 NODE=${NAME}@`hostname -s`
+WEBOT_USER=webot
 
 case "$1" in
     start)
 	echo -n "Starting $prog: "
-	$webot
+	su - ${WEBOT_USER} -c "${webot}"
 	echo "."
     ;;
     stop)
 	echo -n "Stopping $prog: "
-	$webot -d
+	su - ${WEBOT_USER} "${webot} -d"
 	echo "."
 	;;
     status)
-	STATUS=`erl_call -n ${NODE} -a 'erlang whereis [webot_sup]'`
+	STATUS=`su - ${WEBOT_USER} "erl_call -n ${NODE} -a 'erlang whereis [webot_sup]'"`
 	if [ ${STATUS} != "undefined" ]; then
 	    echo "${NAME} is running."
 	else
@@ -34,11 +36,11 @@ case "$1" in
 	;;
     restart)
 	echo -n "Stopping $prog: "
-        $webot -d
+	su - ${WEBOT_USER} "${webot} -d"
 	echo "."
 	sleep 2
 	echo -n "Starting $prog: "
-	$webot
+	su - ${WEBOT_USER} -c "${webot}"
 	echo "."
         ;;
 
