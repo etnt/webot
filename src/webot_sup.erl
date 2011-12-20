@@ -38,16 +38,18 @@ upgrade() ->
     [supervisor:start_child(?MODULE, Spec) || Spec <- Specs],
     ok.
 
+
 %% @spec init([]) -> SupervisorTree
 %% @doc supervisor callback.
 init([]) ->
-    Ip = case os:getenv("WEBMACHINE_IP") of false -> "0.0.0.0"; Any -> Any end,
+    Ip   = get_ip(),
+    Port = get_port(),
     {ok, Dispatch} = file:consult(filename:join(
                          [filename:dirname(code:which(?MODULE)),
                           "..", "priv", "dispatch.conf"])),
     WebConfig = [
                  {ip, Ip},
-                 {port, 8000},
+                 {port, Port},
                  {log_dir, "priv/log"},
                  {dispatch, Dispatch}],
     Web = {webmachine_mochiweb,
@@ -77,3 +79,19 @@ get_config() ->
             {ok,L} = file:consult("/"++PrivPath++"/webot.conf"),
             L
     end.
+
+get_ip() ->
+    case os:getenv("WEBOT_IP") of 
+        false -> "0.0.0.0"; 
+        Any   -> Any 
+    end.
+
+get_port() ->
+    case os:getenv("WEBOT_PORT") of 
+        false -> 8000; 
+        Port  -> l2i(Port)
+    end.
+
+
+l2i(L) when is_list(L)    -> list_to_integer(L);
+l2i(I) when is_integer(I) -> I.
