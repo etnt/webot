@@ -6,6 +6,8 @@
 # config: /etc/webot.conf
 #
 
+ENV=`which env`
+
 webot=/home/webot/start.sh
 prog=webot
 
@@ -20,29 +22,24 @@ export WEBOT_PORT=8611
 case "$1" in
     start)
 	echo -n "Starting $prog: "
-	su - ${WEBOT_USER} -c "${webot}"
+	su - ${WEBOT_USER} -c "${ENV} WEBOT_PORT=${WEBOT_PORT} ${webot}"
 	echo "."
     ;;
     stop)
 	echo -n "Stopping $prog: "
-	su - ${WEBOT_USER} "${webot} -d"
+	su - ${WEBOT_USER} "${ENV} WEBOT_PORT=${WEBOT_PORT} ${webot} -d"
 	echo "."
 	;;
     status)
-	STATUS=`su - ${WEBOT_USER} "erl_call -n ${NODE} -a 'erlang whereis [webot_sup]'"`
-	if [ ${STATUS} != "undefined" ]; then
-	    echo "${NAME} is running."
-	else
-	    echo "${NAME} is not running."
-	fi
+	su - ${WEBOT_USER} "${ENV} WEBOT_PORT=${WEBOT_PORT} ${webot} -s"
 	;;
     restart)
 	echo -n "Stopping $prog: "
-	su - ${WEBOT_USER} "${webot} -d"
+	su - ${WEBOT_USER} "${ENV} WEBOT_PORT=${WEBOT_PORT} ${webot} -d"
 	echo "."
 	sleep 2
 	echo -n "Starting $prog: "
-	su - ${WEBOT_USER} -c "${webot}"
+	su - ${WEBOT_USER} -c "${ENV} WEBOT_PORT=${WEBOT_PORT} ${webot}"
 	echo "."
         ;;
 
