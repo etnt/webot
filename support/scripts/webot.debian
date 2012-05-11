@@ -27,15 +27,15 @@ case "$1" in
     ;;
     stop)
 	echo -n "Stopping $prog: "
-	su - ${WEBOT_USER} "${ENV} WEBOT_PORT=${WEBOT_PORT} ${webot} -d"
+	su - ${WEBOT_USER} -c "${ENV} WEBOT_PORT=${WEBOT_PORT} ${webot} -d"
 	echo "."
 	;;
     status)
-	su - ${WEBOT_USER} "${ENV} WEBOT_PORT=${WEBOT_PORT} ${webot} -s"
+	su - ${WEBOT_USER} -c "${ENV} WEBOT_PORT=${WEBOT_PORT} ${webot} -s"
 	;;
     restart)
 	echo -n "Stopping $prog: "
-	su - ${WEBOT_USER} "${ENV} WEBOT_PORT=${WEBOT_PORT} ${webot} -d"
+	su - ${WEBOT_USER} -c "${ENV} WEBOT_PORT=${WEBOT_PORT} ${webot} -d"
 	echo "."
 	sleep 2
 	echo -n "Starting $prog: "

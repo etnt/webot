@@ -14,6 +14,8 @@
 
 %% ---------------------------------------------------------------------
 %% STATUS (of particular Jenkins job)
+%%
+%% NB: Requires: apt-get isntall libxml-xpath-perl
 %% ---------------------------------------------------------------------
 -define(JENKINS_HOST, "jenkins-dev-master1.internal.machines:8080/jenkins").
 -define(PROJECT, "KRED.staging").
